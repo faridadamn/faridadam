@@ -386,6 +386,20 @@
         width: 100%;
     }
 }
+
+/* Styling untuk kartu Medium */
+#medium-posts > div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(108, 92, 231, 0.15) !important;
+}
+
+#medium-posts h3 {
+    transition: color 0.2s ease;
+}
+
+#medium-posts > div:hover h3 {
+    color: #5a4ad1 !important;
+}
     </style>
 </head>
 <body>
@@ -567,23 +581,66 @@
             
         </section>
 
-        <!--==================== MEDIUM BLOG ====================-->
+<!--==================== MEDIUM BLOG ====================-->
 <section class="blog section" id="blog">
     <div class="container">
         <h2 class="section__title">Tulisan di Medium</h2>
         <p class="section__subtitle">Artikel terbaru seputar data dan grafis 📊</p>
-        
-        <div class="blog__container">
-            <!-- GANTI @faridadam DENGAN @papapart7 DI BAWAH INI -->
-            <img src="https://medium-rss-github.robiningelbrecht.be/@papapart7/0,1,2/layout:two-col" alt="Artikel Medium Terbaru">
-            <!-- PASTIKAN YANG DI ATAS SUDAH DIGANTI -->
-            
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="https://medium.com/@papapart7" target="_blank" class="button">Lihat Semua Artikel di Medium →</a>
-            </div>
+
+        <!-- Container untuk artikel yang akan diisi oleh JavaScript -->
+        <div id="medium-posts" class="blog__container">
+            <p style="text-align: center;">Memuat artikel terbaru...</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="https://medium.com/@papapart7" target="_blank" class="button">Lihat Semua Artikel di Medium →</a>
         </div>
     </div>
 </section>
+
+<!-- Script untuk mengambil dan menampilkan RSS Medium -->
+<script>
+    // Gunakan API rss2json.com (GRATIS) untuk mengubah RSS jadi JSON
+    const mediumRSS = 'https://medium.com/feed/@papapart7';
+    const apiURL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(mediumRSS)}`;
+
+    fetch(apiURL)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok' && data.items.length > 0) {
+                // Ambil 3 artikel pertama
+                const posts = data.items.slice(0, 3);
+                let htmlContent = '';
+
+                posts.forEach(post => {
+                    // Buat struktur kartu untuk setiap artikel
+                    htmlContent += `
+                        <div style="background: #f9f9f9; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; gap: 12px;">
+                            <a href="${post.link}" target="_blank" style="text-decoration: none; color: inherit;">
+                                <h3 style="color: #6c5ce7; margin: 0 0 8px 0; font-size: 1.3rem;">${post.title}</h3>
+                            </a>
+                            <p style="color: #666; margin: 0 0 8px 0; line-height: 1.5;">${post.description.replace(/<[^>]*>/g, '').substring(0, 150)}...</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <small style="color: #999;">${new Date(post.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</small>
+                                <a href="${post.link}" target="_blank" style="color: #6c5ce7; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 5px;">
+                                    Baca selengkapnya <i class="uil uil-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Ganti konten di div medium-posts
+                document.getElementById('medium-posts').innerHTML = htmlContent;
+            } else {
+                document.getElementById('medium-posts').innerHTML = '<p style="text-align: center;">Belum ada artikel. Segera hadir!</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching Medium RSS:', error);
+            document.getElementById('medium-posts').innerHTML = '<p style="text-align: center;">Gagal memuat artikel. Coba lagi nanti.</p>';
+        });
+</script>
 
         <!--==================== CONTACT ====================-->
         <section class="contact section" id="contact">
