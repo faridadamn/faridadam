@@ -1,116 +1,88 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Farid Adam | Personal Website</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f6f8;
-            color: #333;
-        }
-        header {
-            background: linear-gradient(135deg, #2563eb, #1e40af);
-            color: white;
-            text-align: center;
-            padding: 80px 20px;
-        }
-        header h1 {
-            font-size: 42px;
-            margin-bottom: 10px;
-        }
-        header p {
-            font-size: 18px;
-            max-width: 600px;
-            margin: auto;
-        }
-        section {
-            max-width: 900px;
-            margin: auto;
-            padding: 60px 20px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-        }
-        .btn {
-            display: inline-block;
-            background: #2563eb;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .center {
-            text-align: center;
-        }
-        footer {
-            background: #111827;
-            color: white;
-            text-align: center;
-            padding: 30px 10px;
-        }
-    </style>
+    <title>Farid Adam - Portfolio</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-    <h1>Farid Adam</h1>
-    <p>Membantu bisnis dan individu memanfaatkan teknologi secara lebih efektif.</p>
-    <br>
-    <a class="btn" href="#tentang">Kenal Saya</a>
-</header>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Hi, I'm Farid</h1>
+            <p>System Analyst & Web Developer</p>
+            <button>Contact Me</button>
+        </div>
+        <div class="hero-img">
+            <img src="https://via.placeholder.com/200" alt="">
+        </div>
+    </section>
 
-<section id="tentang">
-    <h2>Tentang Saya</h2>
-    <div class="card">
-        <p>
-            Halo, saya <b>Farid Adam</b>.  
-            Saya tertarik di dunia teknologi, aplikasi, dan sistem yang mempermudah pekerjaan.  
-            Saat ini saya aktif belajar dan mengembangkan solusi digital sederhana untuk kebutuhan bisnis.
-        </p>
-    </div>
-</section>
+    <!-- ABOUT -->
+    <section class="about">
+        <h2>About Me</h2>
+        <div class="about-content">
+            <img src="https://via.placeholder.com/200" alt="">
+            <div>
+                <p>
+                    Saya fokus pada pengembangan sistem, digitalisasi proses bisnis,
+                    dan membangun aplikasi berbasis web.
+                </p>
+                <div class="stats">
+                    <div><strong>5+</strong><span>Projects</span></div>
+                    <div><strong>2+</strong><span>Years</span></div>
+                    <div><strong>100%</strong><span>Commitment</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section>
-    <h2>Apa yang Saya Lakukan</h2>
-    <div class="card">
-        ✔️ Website sederhana & landing page  
-        <br>✔️ Aplikasi internal / ERP ringan  
-        <br>✔️ Konsultasi ide sistem  
-        <br>✔️ Otomatisasi pekerjaan manual
-    </div>
-</section>
+    <!-- SKILLS -->
+    <section class="skills">
+        <h2>Skills</h2>
 
-<section>
-    <h2>Kenapa Saya?</h2>
-    <div class="card">
-        Saya fokus pada solusi **praktis, murah, dan bisa langsung dipakai**, bukan sekadar teori.
-        Tujuan saya adalah membantu orang bekerja lebih cepat dan lebih rapi dengan teknologi.
-    </div>
-</section>
+        <div class="skill">
+            <p>HTML</p>
+            <div class="bar"><div style="width:90%"></div></div>
+        </div>
 
-<section class="center">
-    <h2>Hubungi Saya</h2>
-    <p>Diskusi gratis tentang ide website atau aplikasi.</p>
-    <a class="btn" href="https://wa.me/628XXXXXXXXX" target="_blank">
-        Chat WhatsApp
-    </a>
-</section>
+        <div class="skill">
+            <p>CSS</p>
+            <div class="bar"><div style="width:80%"></div></div>
+        </div>
 
-<footer>
-    © 2026 Farid Adam · faridadam.my.id
-</footer>
+        <div class="skill">
+            <p>JavaScript</p>
+            <div class="bar"><div style="width:70%"></div></div>
+        </div>
+
+    </section>
+
+    <!-- PROJECT -->
+    <section class="projects">
+        <h2>Projects</h2>
+
+        <div class="project-card">
+            <h3>HRIS System</h3>
+            <p>Monitoring KPI & performance karyawan</p>
+        </div>
+
+        <div class="project-card">
+            <h3>Stock Opname</h3>
+            <p>Digitalisasi stok gudang</p>
+        </div>
+
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact">
+        <h2>Contact Me</h2>
+        <input type="text" placeholder="Name">
+        <input type="email" placeholder="Email">
+        <textarea placeholder="Message"></textarea>
+        <button>Send</button>
+    </section>
 
 </body>
 </html>
