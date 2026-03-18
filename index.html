@@ -685,8 +685,10 @@
         .then(response => response.json())
         .then(data => {
             if (data.status === 'ok' && data.items.length > 0) {
-                const posts = data.items.slice(0, 3);
-                let htmlContent = '<div class="medium-grid">'; // BUKA GRID
+                // UBAH ANGKA 3 JADI 4 DI BAWAH INI
+                const posts = data.items.slice(0, 4); // <--- INI YANG DIUBAH!
+                
+                let htmlContent = '<div class="medium-grid">';
 
                 posts.forEach(post => {
                     const first500Words = getFirst500Words(post.description);
@@ -718,9 +720,8 @@
                     `;
                 });
 
-                htmlContent += '</div>'; // TUTUP GRID
+                htmlContent += '</div>';
                 
-                // Tambah tombol lihat semua
                 htmlContent += `
                     <div style="text-align: center; margin-top: 30px;">
                         <a href="https://medium.com/@papapart7" target="_blank" class="button">Lihat Semua Artikel di Medium →</a>
@@ -737,7 +738,6 @@
             document.getElementById('medium-posts').innerHTML = '<p style="text-align: center;">Gagal memuat artikel. Coba lagi nanti.</p>';
         });
 </script>
-
         <!--==================== CONTACT ====================-->
         <section class="contact section" id="contact">
             <div class="container">
