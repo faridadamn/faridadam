@@ -439,6 +439,34 @@
         font-size: 1.3rem !important;
     }
 }
+/* Grid untuk 2 kolom di desktop */
+.medium-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+/* HP: 1 kolom */
+@media (max-width: 768px) {
+    .medium-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+.medium-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.medium-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 40px rgba(108, 92, 231, 0.2) !important;
+}
+
+.medium-card:hover img {
+    transform: scale(1.05);
+}
     </style>
 </head>
 <body>
@@ -641,26 +669,16 @@
 <script>
     // Fungsi untuk membersihkan HTML dan mengambil 500 kata pertama
     function getFirst500Words(htmlString) {
-        // Hapus tag HTML, ambil teksnya aja
         const text = htmlString.replace(/<[^>]*>/g, ' ');
-        
-        // Pisahkan jadi array kata-kata (split by spasi)
         const words = text.split(/\s+/).filter(word => word.length > 0);
-        
-        // Ambil 500 kata pertama
         const first500 = words.slice(0, 500).join(' ');
-        
-        // Kalau kurang dari 500 kata, tambahin "..."
         return words.length > 500 ? first500 + '...' : first500;
     }
 
     // Fungsi untuk ekstrak gambar dari konten Medium
     function extractImageFromContent(content) {
-        // Cari tag <img> pertama dalam konten
         const imgRegex = /<img[^>]+src="([^">]+)"/;
         const match = content.match(imgRegex);
-        
-        // Kalau nemu gambar, return URL-nya. Kalau nggak, return placeholder
         return match ? match[1] : 'https://via.placeholder.com/400x200/6c5ce7/ffffff?text=Medium+Article';
     }
 
@@ -671,37 +689,32 @@
         .then(response => response.json())
         .then(data => {
             if (data.status === 'ok' && data.items.length > 0) {
-                // Ambil 3 artikel pertama
                 const posts = data.items.slice(0, 3);
-                let htmlContent = '';
+                let htmlContent = '<div class="medium-grid">'; // BUKA GRID
 
                 posts.forEach(post => {
-                    // Ambil 500 kata pertama
                     const first500Words = getFirst500Words(post.description);
-                    
-                    // Ambil gambar thumbnail
                     const thumbnail = extractImageFromContent(post.content || post.description);
                     
-                    // Buat struktur kartu untuk setiap artikel
                     htmlContent += `
-                        <div style="background: white; border-radius: 20px; overflow: hidden; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: all 0.3s ease; display: flex; flex-direction: column;">
-                            <a href="${post.link}" target="_blank" style="display: block; height: 250px; overflow: hidden;">
+                        <div class="medium-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                            <a href="${post.link}" target="_blank" style="display: block; height: 220px; overflow: hidden;">
                                 <img src="${thumbnail}" alt="${post.title}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
                             </a>
-                            <div style="padding: 25px;">
+                            <div style="padding: 20px;">
                                 <a href="${post.link}" target="_blank" style="text-decoration: none; color: inherit;">
-                                    <h3 style="color: #6c5ce7; margin: 0 0 10px 0; font-size: 1.5rem; transition: color 0.2s;">${post.title}</h3>
+                                    <h3 style="color: #6c5ce7; margin: 0 0 10px 0; font-size: 1.3rem;">${post.title}</h3>
                                 </a>
-                                <div style="color: #666; margin-bottom: 20px; line-height: 1.6; text-align: justify;">
-                                    ${first500Words}
+                                <div style="color: #666; margin-bottom: 15px; line-height: 1.5; text-align: justify; max-height: 120px; overflow: hidden;">
+                                    ${first500Words.substring(0, 200)}...
                                 </div>
-                                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 12px;">
                                     <small style="color: #999;">
-                                        <i class="uil uil-calendar-alt" style="margin-right: 5px;"></i>
+                                        <i class="uil uil-calendar-alt"></i>
                                         ${new Date(post.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                                     </small>
-                                    <a href="${post.link}" target="_blank" style="color: #6c5ce7; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; background: #f0f0f0; border-radius: 30px; transition: all 0.2s;">
-                                        Baca Lengkap <i class="uil uil-arrow-right"></i>
+                                    <a href="${post.link}" target="_blank" style="color: #6c5ce7; text-decoration: none; font-weight: 500; padding: 5px 15px; background: #f0f0f0; border-radius: 30px; font-size: 0.9rem;">
+                                        Baca <i class="uil uil-arrow-right"></i>
                                     </a>
                                 </div>
                             </div>
@@ -709,7 +722,15 @@
                     `;
                 });
 
-                // Ganti konten di div medium-posts
+                htmlContent += '</div>'; // TUTUP GRID
+                
+                // Tambah tombol lihat semua
+                htmlContent += `
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a href="https://medium.com/@papapart7" target="_blank" class="button">Lihat Semua Artikel di Medium →</a>
+                    </div>
+                `;
+
                 document.getElementById('medium-posts').innerHTML = htmlContent;
             } else {
                 document.getElementById('medium-posts').innerHTML = '<p style="text-align: center;">Belum ada artikel. Segera hadir!</p>';
