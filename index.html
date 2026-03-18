@@ -400,6 +400,45 @@
 #medium-posts > div:hover h3 {
     color: #5a4ad1 !important;
 }
+
+/* Styling untuk kartu Medium versi final */
+#medium-posts > div {
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+#medium-posts > div:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 40px rgba(108, 92, 231, 0.2) !important;
+}
+
+#medium-posts > div:hover img {
+    transform: scale(1.05);
+}
+
+#medium-posts h3:hover {
+    color: #5a4ad1 !important;
+    text-decoration: underline;
+}
+
+#medium-posts a[style*="background: #f0f0f0"]:hover {
+    background: #6c5ce7 !important;
+    color: white !important;
+}
+
+/* Responsive untuk HP */
+@media (max-width: 768px) {
+    #medium-posts > div {
+        margin-bottom: 20px;
+    }
+    
+    #medium-posts > div > div {
+        padding: 15px !important;
+    }
+    
+    #medium-posts h3 {
+        font-size: 1.3rem !important;
+    }
+}
     </style>
 </head>
 <body>
@@ -600,7 +639,31 @@
 
 <!-- Script untuk mengambil dan menampilkan RSS Medium -->
 <script>
-    // Gunakan API rss2json.com (GRATIS) untuk mengubah RSS jadi JSON
+    // Fungsi untuk membersihkan HTML dan mengambil 500 kata pertama
+    function getFirst500Words(htmlString) {
+        // Hapus tag HTML, ambil teksnya aja
+        const text = htmlString.replace(/<[^>]*>/g, ' ');
+        
+        // Pisahkan jadi array kata-kata (split by spasi)
+        const words = text.split(/\s+/).filter(word => word.length > 0);
+        
+        // Ambil 500 kata pertama
+        const first500 = words.slice(0, 500).join(' ');
+        
+        // Kalau kurang dari 500 kata, tambahin "..."
+        return words.length > 500 ? first500 + '...' : first500;
+    }
+
+    // Fungsi untuk ekstrak gambar dari konten Medium
+    function extractImageFromContent(content) {
+        // Cari tag <img> pertama dalam konten
+        const imgRegex = /<img[^>]+src="([^">]+)"/;
+        const match = content.match(imgRegex);
+        
+        // Kalau nemu gambar, return URL-nya. Kalau nggak, return placeholder
+        return match ? match[1] : 'https://via.placeholder.com/400x200/6c5ce7/ffffff?text=Medium+Article';
+    }
+
     const mediumRSS = 'https://medium.com/feed/@papapart7';
     const apiURL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(mediumRSS)}`;
 
@@ -613,18 +676,34 @@
                 let htmlContent = '';
 
                 posts.forEach(post => {
+                    // Ambil 500 kata pertama
+                    const first500Words = getFirst500Words(post.description);
+                    
+                    // Ambil gambar thumbnail
+                    const thumbnail = extractImageFromContent(post.content || post.description);
+                    
                     // Buat struktur kartu untuk setiap artikel
                     htmlContent += `
-                        <div style="background: #f9f9f9; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; gap: 12px;">
-                            <a href="${post.link}" target="_blank" style="text-decoration: none; color: inherit;">
-                                <h3 style="color: #6c5ce7; margin: 0 0 8px 0; font-size: 1.3rem;">${post.title}</h3>
+                        <div style="background: white; border-radius: 20px; overflow: hidden; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: all 0.3s ease; display: flex; flex-direction: column;">
+                            <a href="${post.link}" target="_blank" style="display: block; height: 250px; overflow: hidden;">
+                                <img src="${thumbnail}" alt="${post.title}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
                             </a>
-                            <p style="color: #666; margin: 0 0 8px 0; line-height: 1.5;">${post.description.replace(/<[^>]*>/g, '').substring(0, 150)}...</p>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <small style="color: #999;">${new Date(post.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</small>
-                                <a href="${post.link}" target="_blank" style="color: #6c5ce7; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 5px;">
-                                    Baca selengkapnya <i class="uil uil-arrow-right"></i>
+                            <div style="padding: 25px;">
+                                <a href="${post.link}" target="_blank" style="text-decoration: none; color: inherit;">
+                                    <h3 style="color: #6c5ce7; margin: 0 0 10px 0; font-size: 1.5rem; transition: color 0.2s;">${post.title}</h3>
                                 </a>
+                                <div style="color: #666; margin-bottom: 20px; line-height: 1.6; text-align: justify;">
+                                    ${first500Words}
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px;">
+                                    <small style="color: #999;">
+                                        <i class="uil uil-calendar-alt" style="margin-right: 5px;"></i>
+                                        ${new Date(post.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                    </small>
+                                    <a href="${post.link}" target="_blank" style="color: #6c5ce7; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; background: #f0f0f0; border-radius: 30px; transition: all 0.2s;">
+                                        Baca Lengkap <i class="uil uil-arrow-right"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     `;
